@@ -1,0 +1,2170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taboo Card Grid (Print Ready)</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Apply the Inter font globally */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+            /* Remove default margin/padding for a cleaner look */
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Container for cards - using CSS Grid for 4-column layout */
+        #cards-container {
+            /* Responsive: 1 column mobile, 2 columns medium, 4 columns large */
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 0rem; /* 6 (Tailwind spacing) */
+            width: 100%;
+        }
+	.card {
+            padding: 3rem 1rem 4rem 1rem;
+	}
+	li {
+	    margin-top: 1rem !important;
+	}
+
+        /* Responsive Breakpoints */
+        @media (min-width: 640px) {
+            #cards-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            #cards-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Custom print-friendly styling */
+        @media print {
+            body {
+                background: white;
+                margin: 0;
+            }
+            /* Force 4 columns on print */
+            #cards-container {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 0 /* Reduced gap for print */
+                padding: 0;
+                max-width: 100%;
+                width: 100%;
+            }
+            .card {
+                height: 100%;
+                border: 1px solid #333 !important; /* Ensure border is visible */
+                box-shadow: none !important;
+                border-radius: 0 !important;
+		page-break-inside: avoid; /* For wider browser support */
+		break-inside: avoid;
+            }
+            /* Adjust font size slightly for printing */
+            .main-word {
+                font-size: 1.25rem !important; /* Smaller text for compact cards */
+                line-height: 1.5rem !important;
+            }
+            .taboo-words {
+                font-size: 0.75rem !important;
+            }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- This div will contain all the generated cards -->
+    <div id="cards-container">
+        <!-- Cards will be inserted here by JavaScript -->
+    </div>
+
+    <script>
+        // =======================================================
+        // JSON DATA BLOCK (EASY TO CHANGE)
+        // This simulates reading the content of "words.json"
+        // =======================================================
+        const cardJsonString = `
+[
+  {
+    "main_word": "Santa Claus",
+    "taboo_words": [
+      "North Pole",
+      "Sleigh",
+      "Reindeer",
+      "Ho Ho Ho",
+      "Gifts"
+    ]
+  },
+  {
+    "main_word": "Christmas Tree",
+    "taboo_words": [
+      "Ornaments",
+      "Lights",
+      "Pine",
+      "Presents",
+      "Star"
+    ]
+  },
+  {
+    "main_word": "Snowman",
+    "taboo_words": [
+      "Frosty",
+      "Carrot Nose",
+      "Snow",
+      "Winter",
+      "Hat"
+    ]
+  },
+  {
+    "main_word": "Rudolph",
+    "taboo_words": [
+      "Red Nose",
+      "Reindeer",
+      "Santa",
+      "Sleigh",
+      "Leader"
+    ]
+  },
+  {
+    "main_word": "Stocking",
+    "taboo_words": [
+      "Fireplace",
+      "Stuffers",
+      "Hanging",
+      "Gifts",
+      "Mantel"
+    ]
+  },
+  {
+    "main_word": "Elf",
+    "taboo_words": [
+      "Santa",
+      "Workshop",
+      "Toys",
+      "Small",
+      "Pointy Ears"
+    ]
+  },
+  {
+    "main_word": "Gingerbread",
+    "taboo_words": [
+      "Cookies",
+      "House",
+      "Icing",
+      "Spice",
+      "Baking"
+    ]
+  },
+  {
+    "main_word": "Mistletoe",
+    "taboo_words": [
+      "Kiss",
+      "Hanging",
+      "Green",
+      "Tradition",
+      "Holiday"
+    ]
+  },
+  {
+    "main_word": "Sleigh",
+    "taboo_words": [
+      "Santa",
+      "Ride",
+      "Reindeer",
+      "Flying",
+      "Night"
+    ]
+  },
+  {
+    "main_word": "Hot Cocoa",
+    "taboo_words": [
+      "Chocolate",
+      "Marshmallows",
+      "Warm",
+      "Mug",
+      "Drink"
+    ]
+  },
+  {
+    "main_word": "Snowflake",
+    "taboo_words": [
+      "Winter",
+      "Ice",
+      "Cold",
+      "Unique",
+      "White"
+    ]
+  },
+  {
+    "main_word": "Candy Cane",
+    "taboo_words": [
+      "Peppermint",
+      "Red",
+      "White",
+      "Stripes",
+      "Sweet"
+    ]
+  },
+  {
+    "main_word": "Nativity",
+    "taboo_words": [
+      "Manger",
+      "Jesus",
+      "Mary",
+      "Joseph",
+      "Birth"
+    ]
+  },
+  {
+    "main_word": "Reindeer",
+    "taboo_words": [
+      "Antlers",
+      "Santa",
+      "Snow",
+      "Flying",
+      "Sleigh"
+    ]
+  },
+  {
+    "main_word": "Poinsettia",
+    "taboo_words": [
+      "Red",
+      "Flower",
+      "Leaves",
+      "Plant",
+      "Holiday"
+    ]
+  },
+  {
+    "main_word": "Wreath",
+    "taboo_words": [
+      "Green",
+      "Circle",
+      "Door",
+      "Decoration",
+      "Pine"
+    ]
+  },
+  {
+    "main_word": "North Pole",
+    "taboo_words": [
+      "Santa",
+      "Workshop",
+      "Cold",
+      "Elves",
+      "Arctic"
+    ]
+  },
+  {
+    "main_word": "Chimney",
+    "taboo_words": [
+      "Santa",
+      "Smoke",
+      "Roof",
+      "Fireplace",
+      "Down"
+    ]
+  },
+  {
+    "main_word": "Tinsel",
+    "taboo_words": [
+      "Shiny",
+      "Tree",
+      "Decoration",
+      "Strands",
+      "Sparkle"
+    ]
+  },
+  {
+    "main_word": "Ornament",
+    "taboo_words": [
+      "Ball",
+      "Tree",
+      "Hanging",
+      "Decoration",
+      "Glass"
+    ]
+  },
+  {
+    "main_word": "Gift Wrap",
+    "taboo_words": [
+      "Paper",
+      "Ribbon",
+      "Present",
+      "Tape",
+      "Bow"
+    ]
+  },
+  {
+    "main_word": "Carolers",
+    "taboo_words": [
+      "Singing",
+      "Doorstep",
+      "Songs",
+      "Choir",
+      "Night"
+    ]
+  },
+  {
+    "main_word": "Holly",
+    "taboo_words": [
+      "Red Berries",
+      "Green",
+      "Leaves",
+      "Decoration",
+      "Sharp"
+    ]
+  },
+  {
+    "main_word": "Snowball",
+    "taboo_words": [
+      "Throw",
+      "Winter",
+      "Cold",
+      "Fight",
+      "Round"
+    ]
+  },
+  {
+    "main_word": "Peppermint",
+    "taboo_words": [
+      "Candy",
+      "Red",
+      "White",
+      "Mint",
+      "Sweet"
+    ]
+  },
+  {
+    "main_word": "Holiday Lights",
+    "taboo_words": [
+      "String",
+      "Bright",
+      "Tree",
+      "Bulbs",
+      "Colorful"
+    ]
+  },
+  {
+    "main_word": "Presents",
+    "taboo_words": [
+      "Gifts",
+      "Wrapping",
+      "Tree",
+      "Ribbon",
+      "Giving"
+    ]
+  },
+  {
+    "main_word": "Frostbite",
+    "taboo_words": [
+      "Cold",
+      "Skin",
+      "Winter",
+      "Ice",
+      "Danger"
+    ]
+  },
+  {
+    "main_word": "Skiing",
+    "taboo_words": [
+      "Snow",
+      "Slopes",
+      "Winter",
+      "Poles",
+      "Mountains"
+    ]
+  },
+  {
+    "main_word": "Eggnog",
+    "taboo_words": [
+      "Drink",
+      "Holiday",
+      "Creamy",
+      "Nutmeg",
+      "Festive"
+    ]
+  },
+  {
+    "main_word": "Yule Log",
+    "taboo_words": [
+      "Cake",
+      "Chocolate",
+      "Fireplace",
+      "Tradition",
+      "Dessert"
+    ]
+  },
+  {
+    "main_word": "Evergreen",
+    "taboo_words": [
+      "Tree",
+      "Pine",
+      "Needle",
+      "Green",
+      "Winter"
+    ]
+  },
+  {
+    "main_word": "Sledding",
+    "taboo_words": [
+      "Hill",
+      "Snow",
+      "Ride",
+      "Slope",
+      "Winter"
+    ]
+  },
+  {
+    "main_word": "Ice Skates",
+    "taboo_words": [
+      "Blades",
+      "Rink",
+      "Frozen",
+      "Glide",
+      "Shoes"
+    ]
+  },
+  {
+    "main_word": "Krampus",
+    "taboo_words": [
+      "Folklore",
+      "Scary",
+      "Creature",
+      "Christmas",
+      "Punish"
+    ]
+  },
+  {
+    "main_word": "Angel",
+    "taboo_words": [
+      "Wings",
+      "Halo",
+      "Tree Topper",
+      "Heaven",
+      "Spirit"
+    ]
+  },
+  {
+    "main_word": "Holiday Cookies",
+    "taboo_words": [
+      "Baking",
+      "Sweet",
+      "Shapes",
+      "Frosting",
+      "Tray"
+    ]
+  },
+  {
+    "main_word": "Christmas Eve",
+    "taboo_words": [
+      "Night",
+      "Before",
+      "Santa",
+      "Waiting",
+      "Tradition"
+    ]
+  },
+  {
+    "main_word": "Hot Cider",
+    "taboo_words": [
+      "Apple",
+      "Warm",
+      "Drink",
+      "Spice",
+      "Mug"
+    ]
+  },
+  {
+    "main_word": "Yule",
+    "taboo_words": [
+      "Log",
+      "Celebration",
+      "Ancient",
+      "Winter",
+      "Festival"
+    ]
+  },
+  {
+    "main_word": "Advent",
+    "taboo_words": [
+      "Calendar",
+      "Countdown",
+      "Weeks",
+      "Candles",
+      "Season"
+    ]
+  },
+  {
+    "main_word": "Christmas Morning",
+    "taboo_words": [
+      "Presents",
+      "Early",
+      "Tree",
+      "Excitement",
+      "Family"
+    ]
+  },
+  {
+    "main_word": "Gingerbread House",
+    "taboo_words": [
+      "Candy",
+      "Icing",
+      "Build",
+      "Cookies",
+      "Decoration"
+    ]
+  },
+  {
+    "main_word": "Caroling",
+    "taboo_words": [
+      "Singing",
+      "Door",
+      "Choir",
+      "Songs",
+      "Tradition"
+    ]
+  },
+  {
+    "main_word": "North Star",
+    "taboo_words": [
+      "Guiding",
+      "Bethlehem",
+      "Bright",
+      "Sky",
+      "Shining"
+    ]
+  },
+  {
+    "main_word": "Scarf",
+    "taboo_words": [
+      "Warm",
+      "Winter",
+      "Neck",
+      "Clothing",
+      "Wool"
+    ]
+  },
+  {
+    "main_word": "Fireplace",
+    "taboo_words": [
+      "Heat",
+      "Mantel",
+      "Cozy",
+      "Crackling",
+      "Wood"
+    ]
+  },
+  {
+    "main_word": "Reindeer Games",
+    "taboo_words": [
+      "Rudolph",
+      "Play",
+      "Snow",
+      "Activity",
+      "Fun"
+    ]
+  },
+  {
+    "main_word": "Icicles",
+    "taboo_words": [
+      "Hanging",
+      "Frozen",
+      "Roof",
+      "Drip",
+      "Sharp"
+    ]
+  },
+  {
+    "main_word": "Holiday Parade",
+    "taboo_words": [
+      "Floats",
+      "Marching",
+      "Music",
+      "Crowd",
+      "Celebration"
+    ]
+  },
+  {
+    "main_word": "Tree Skirt",
+    "taboo_words": [
+      "Bottom",
+      "Decoration",
+      "Cover",
+      "Presents",
+      "Round"
+    ]
+  },
+  {
+    "main_word": "Pine Cones",
+    "taboo_words": [
+      "Tree",
+      "Brown",
+      "Seeds",
+      "Winter",
+      "Nature"
+    ]
+  },
+  {
+    "main_word": "Carriage Ride",
+    "taboo_words": [
+      "Horse",
+      "Winter",
+      "Bells",
+      "Sleigh-like",
+      "Romantic"
+    ]
+  },
+  {
+    "main_word": "Festive Sweater",
+    "taboo_words": [
+      "Ugly",
+      "Knit",
+      "Colorful",
+      "Warm",
+      "Pattern"
+    ]
+  },
+  {
+    "main_word": "Reindeer Antlers",
+    "taboo_words": [
+      "Headband",
+      "Costume",
+      "Brown",
+      "Branch-like",
+      "Holiday"
+    ]
+  },
+  {
+    "main_word": "Nutcracker",
+    "taboo_words": [
+      "Ballet",
+      "Toy",
+      "Soldier",
+      "Crack",
+      "Christmas"
+    ]
+  },
+  {
+    "main_word": "Blizzard",
+    "taboo_words": [
+      "Storm",
+      "Snow",
+      "Wind",
+      "Whiteout",
+      "Winter"
+    ]
+  },
+  {
+    "main_word": "Gift Bag",
+    "taboo_words": [
+      "Present",
+      "Tissue Paper",
+      "Handles",
+      "Wrap",
+      "Surprise"
+    ]
+  },
+  {
+    "main_word": "Holiday Market",
+    "taboo_words": [
+      "Booths",
+      "Crafts",
+      "Vendors",
+      "Food",
+      "Winter"
+    ]
+  },
+  {
+    "main_word": "Icicle Lights",
+    "taboo_words": [
+      "Hanging",
+      "White",
+      "Roofline",
+      "Decoration",
+      "String"
+    ]
+  },
+  {
+    "main_word": "Frosty",
+    "taboo_words": [
+      "Snowman",
+      "Hat",
+      "Nose",
+      "Winter",
+      "Magic"
+    ]
+  },
+  {
+    "main_word": "Toboggan",
+    "taboo_words": [
+      "Sled",
+      "Hill",
+      "Snow",
+      "Slide",
+      "Ride"
+    ]
+  },
+  {
+    "main_word": "Warm Mittens",
+    "taboo_words": [
+      "Hands",
+      "Winter",
+      "Knitted",
+      "Cold",
+      "Wool"
+    ]
+  },
+  {
+    "main_word": "Bethlehem",
+    "taboo_words": [
+      "Star",
+      "Town",
+      "Jerusalem",
+      "Jesus",
+      "Nativity"
+    ]
+  },
+  {
+    "main_word": "Holiday Spirit",
+    "taboo_words": [
+      "Cheer",
+      "Joy",
+      "Festive",
+      "Mood",
+      "Season"
+    ]
+  },
+  {
+    "main_word": "Gingerbread Man",
+    "taboo_words": [
+      "Cookie",
+      "Icing",
+      "Shape",
+      "Bake",
+      "Brown"
+    ]
+  },
+  {
+    "main_word": "Twelve Days",
+    "taboo_words": [
+      "Song",
+      "Partridge",
+      "Gifts",
+      "Birds",
+      "Chorus"
+    ]
+  },
+  {
+    "main_word": "Bells",
+    "taboo_words": [
+      "Jingle",
+      "Ringing",
+      "Sleigh",
+      "Sound",
+      "Holiday"
+    ]
+  },
+  {
+    "main_word": "Snowshoes",
+    "taboo_words": [
+      "Walking",
+      "Winter",
+      "Float",
+      "Deep Snow",
+      "Outdoor"
+    ]
+  },
+  {
+    "main_word": "Winter Coat",
+    "taboo_words": [
+      "Warm",
+      "Jacket",
+      "Cold",
+      "Zipper",
+      "Layer"
+    ]
+  },
+  {
+    "main_word": "Holiday Feast",
+    "taboo_words": [
+      "Dinner",
+      "Family",
+      "Meal",
+      "Turkey",
+      "Celebration"
+    ]
+  },
+  {
+    "main_word": "Marshmallows",
+    "taboo_words": [
+      "Cocoa",
+      "Soft",
+      "White",
+      "Sweet",
+      "Fluffy"
+    ]
+  },
+  {
+    "main_word": "Fuzzy Socks",
+    "taboo_words": [
+      "Warm",
+      "Feet",
+      "Cozy",
+      "Winter",
+      "Knit"
+    ]
+  },
+  {
+    "main_word": "Ski Lodge",
+    "taboo_words": [
+      "Cabin",
+      "Mountain",
+      "Fire",
+      "Resort",
+      "Winter"
+    ]
+  },
+  {
+    "main_word": "Holiday Movie",
+    "taboo_words": [
+      "Film",
+      "Christmas",
+      "Watch",
+      "Family",
+      "Cozy"
+    ]
+  },
+  {
+    "main_word": "Figgy Pudding",
+    "taboo_words": [
+      "Dessert",
+      "Traditional",
+      "Sweet",
+      "British",
+      "Holiday"
+    ]
+  },
+  {
+    "main_word": "Tidings",
+    "taboo_words": [
+      "Greetings",
+      "News",
+      "Joy",
+      "Goodwill",
+      "Messages"
+    ]
+  },
+  {
+    "main_word": "Reindeer Bells",
+    "taboo_words": [
+      "Jingle",
+      "Harness",
+      "Sleigh",
+      "Sound",
+      "Holiday"
+    ]
+  },
+  {
+    "main_word": "Sleigh Ride",
+    "taboo_words": [
+      "Snow",
+      "Horse",
+      "Bells",
+      "Winter",
+      "Cold"
+    ]
+  },
+  {
+    "main_word": "Holiday Cards",
+    "taboo_words": [
+      "Mail",
+      "Greetings",
+      "Envelope",
+      "Family",
+      "Photos"
+    ]
+  },
+  {
+    "main_word": "Winter Wonderland",
+    "taboo_words": [
+      "Snow",
+      "Magic",
+      "Scene",
+      "Sparkle",
+      "Cold"
+    ]
+  },
+  {
+    "main_word": "Snow Angels",
+    "taboo_words": [
+      "Ground",
+      "Flap",
+      "Wings",
+      "Winter",
+      "Kids"
+    ]
+  },
+  {
+    "main_word": "Chestnuts",
+    "taboo_words": [
+      "Roasting",
+      "Fire",
+      "Snack",
+      "Warm",
+      "Holiday"
+    ]
+  },
+  {
+    "main_word": "Caramel Popcorn",
+    "taboo_words": [
+      "Sweet",
+      "Crunchy",
+      "Snack",
+      "Tin",
+      "Gift"
+    ]
+  },
+  {
+    "main_word": "Santa’s Hat",
+    "taboo_words": [
+      "Red",
+      "White",
+      "Fuzzy",
+      "Costume",
+      "Christmas"
+    ]
+  },
+  {
+    "main_word": "Gift Exchange",
+    "taboo_words": [
+      "Swap",
+      "Presents",
+      "Party",
+      "Random",
+      "Tradition"
+    ]
+  },
+  {
+    "main_word": "Ski Lift",
+    "taboo_words": [
+      "Chair",
+      "Mountain",
+      "Snow",
+      "Up",
+      "Resort"
+    ]
+  },
+  {
+    "main_word": "Holiday Baking",
+    "taboo_words": [
+      "Cookies",
+      "Oven",
+      "Flour",
+      "Sweet",
+      "Recipes"
+    ]
+  },
+  {
+    "main_word": "Snowdrift",
+    "taboo_words": [
+      "Pile",
+      "Wind",
+      "White",
+      "Snow",
+      "Winter"
+    ]
+  },
+  {
+    "main_word": "Icicle Ornament",
+    "taboo_words": [
+      "Glass",
+      "Tree",
+      "Shiny",
+      "Hanging",
+      "Decoration"
+    ]
+  },
+  {
+    "main_word": "Milk & Cookies",
+    "taboo_words": [
+      "Santa",
+      "Plate",
+      "Treats",
+      "Night",
+      "Snack"
+    ]
+  },
+  {
+    "main_word": "Warm Blanket",
+    "taboo_words": [
+      "Cozy",
+      "Throw",
+      "Soft",
+      "Couch",
+      "Winter"
+    ]
+  },
+  {
+    "main_word": "Gift Bow",
+    "taboo_words": [
+      "Ribbon",
+      "Present",
+      "Top",
+      "Curl",
+      "Decoration"
+    ]
+  },
+  {
+    "main_word": "Jolly",
+    "taboo_words": [
+      "Merry",
+      "Cheerful",
+      "Santa",
+      "Laugh",
+      "Happy"
+    ]
+  },
+  {
+    "main_word": "Toy Train",
+    "taboo_words": [
+      "Tracks",
+      "Present",
+      "Under Tree",
+      "Miniature",
+      "Play"
+    ]
+  },
+  {
+    "main_word": "Winter Night",
+    "taboo_words": [
+      "Cold",
+      "Dark",
+      "Stars",
+      "Quiet",
+      "Snow"
+    ]
+  },
+  {
+    "main_word": "Snow Globe",
+    "taboo_words": [
+      "Shake",
+      "Scene",
+      "Glass",
+      "Winter",
+      "Decoration"
+    ]
+  },
+  {
+    "main_word": "Tree Farm",
+    "taboo_words": [
+      "Pine",
+      "Cut",
+      "Choose",
+      "Outdoors",
+      "Fresh"
+    ]
+  },
+  {
+    "main_word": "Holiday Party",
+    "taboo_words": [
+      "Celebration",
+      "Friends",
+      "Festive",
+      "Food",
+      "Drinks"
+    ]
+  },
+  {
+    "main_word": "Countdown",
+    "taboo_words": [
+      "Days",
+      "Advent",
+      "Calendar",
+      "Waiting",
+      "Number"
+    ]
+  },
+  {
+    "main_word": "Gingerbread Latte",
+    "taboo_words": [
+      "Coffee",
+      "Spice",
+      "Warm",
+      "Drink",
+      "Winter"
+    ]
+  },
+  {
+    "main_word": "Winter Scenery",
+    "taboo_words": [
+      "Landscape",
+      "Snow",
+      "Trees",
+      "Quiet",
+      "White"
+    ]
+  },
+  {
+    "main_word": "Carriage Horse",
+    "taboo_words": [
+      "Ride",
+      "Bells",
+      "Winter",
+      "Street",
+      "Vintage"
+    ]
+  },
+  {
+    "main_word": "Kringle",
+    "taboo_words": [
+      "Scandinavian",
+      "Pastry",
+      "Holiday",
+      "Sweet",
+      "Tradition"
+    ]
+  },
+  {
+    "main_word": "Santa's Workshop",
+    "taboo_words": [
+      "Toys",
+      "Elves",
+      "North Pole",
+      "Build",
+      "Gifts"
+    ]
+  },
+  {
+    "main_word": "Red Ribbon",
+    "taboo_words": [
+      "Bow",
+      "Wrap",
+      "Decoration",
+      "Present",
+      "Satin"
+    ]
+  },
+  {
+    "main_word": "Jingling Bells",
+    "taboo_words": [
+      "Ring",
+      "Sound",
+      "Sleigh",
+      "Music",
+      "Holiday"
+    ]
+  },
+  {
+    "main_word": "Holiday Wreath",
+    "taboo_words": [
+      "Circle",
+      "Green",
+      "Door",
+      "Decoration",
+      "Pine"
+    ]
+  },
+  {
+    "main_word": "Snowstorm",
+    "taboo_words": [
+      "Wind",
+      "Flakes",
+      "Cold",
+      "Weather",
+      "Strong"
+    ]
+  },
+  {
+    "main_word": "Tree Ornaments",
+    "taboo_words": [
+      "Balls",
+      "Decorating",
+      "Hanging",
+      "Colorful",
+      "Glass"
+    ]
+  },
+  {
+    "main_word": "Holiday Pajamas",
+    "taboo_words": [
+      "Matching",
+      "Family",
+      "Cozy",
+      "Pattern",
+      "Sleep"
+    ]
+  },
+  {
+    "main_word": "Pine Scent",
+    "taboo_words": [
+      "Smell",
+      "Tree",
+      "Fresh",
+      "Holiday",
+      "Forest"
+    ]
+  },
+  {
+    "main_word": "Wrapping Paper",
+    "taboo_words": [
+      "Gifts",
+      "Rolls",
+      "Holiday",
+      "Tape",
+      "Colorful"
+    ]
+  },
+  {
+    "main_word": "Milk Punch",
+    "taboo_words": [
+      "Drink",
+      "Eggnog-like",
+      "Sweet",
+      "Creamy",
+      "Holiday"
+    ]
+  },
+  {
+    "main_word": "Festive Garland",
+    "taboo_words": [
+      "Green",
+      "String",
+      "Decoration",
+      "Pine",
+      "Drape"
+    ]
+  },
+  {
+    "main_word": "Sleigh Bells",
+    "taboo_words": [
+      "Jingle",
+      "Horse",
+      "Harness",
+      "Metal",
+      "Ring"
+    ]
+  },
+  {
+    "main_word": "Gift Receipt",
+    "taboo_words": [
+      "Return",
+      "Present",
+      "Paper",
+      "Store",
+      "Slip"
+    ]
+  },
+  {
+    "main_word": "Chilly Morning",
+    "taboo_words": [
+      "Cold",
+      "Breath",
+      "Frosty",
+      "Early",
+      "Air"
+    ]
+  },
+  {
+    "main_word": "Hot Toddy",
+    "taboo_words": [
+      "Drink",
+      "Warm",
+      "Whiskey",
+      "Honey",
+      "Winter"
+    ]
+  },
+  {
+    "main_word": "Yule Goat",
+    "taboo_words": [
+      "Nordic",
+      "Straw",
+      "Holiday",
+      "Tradition",
+      "Figure"
+    ]
+  },
+  {
+    "main_word": "Winter Boots",
+    "taboo_words": [
+      "Snow",
+      "Warm",
+      "Waterproof",
+      "Feet",
+      "Cold"
+    ]
+  },
+  {
+    "main_word": "Snowplow",
+    "taboo_words": [
+      "Clear",
+      "Road",
+      "Winter",
+      "Truck",
+      "Snow"
+    ]
+  },
+  {
+    "main_word": "Hearth",
+    "taboo_words": [
+      "Fireplace",
+      "Warm",
+      "Stone",
+      "Mantel",
+      "Fire"
+    ]
+  },
+  {
+    "main_word": "Holiday Playlist",
+    "taboo_words": [
+      "Music",
+      "Songs",
+      "Cheer",
+      "Listen",
+      "Festive"
+    ]
+  },
+  {
+    "main_word": "Tree Topper",
+    "taboo_words": [
+      "Star",
+      "Angel",
+      "Top",
+      "Decoration",
+      "Shine"
+    ]
+  },
+  {
+    "main_word": "Reindeer Feed",
+    "taboo_words": [
+      "Oats",
+      "Sprinkle",
+      "Yard",
+      "Magic",
+      "Santa"
+    ]
+  },
+  {
+    "main_word": "Sleigh Tracks",
+    "taboo_words": [
+      "Snow",
+      "Marks",
+      "Ride",
+      "Lines",
+      "Reindeer"
+    ]
+  },
+  {
+    "main_word": "Whipped Cream",
+    "taboo_words": [
+      "Cocoa",
+      "Topping",
+      "Sweet",
+      "Fluffy",
+      "Dessert"
+    ]
+  },
+  {
+    "main_word": "Holiday Candle",
+    "taboo_words": [
+      "Scent",
+      "Wax",
+      "Flame",
+      "Light",
+      "Cozy"
+    ]
+  },
+  {
+    "main_word": "Cookie Cutter",
+    "taboo_words": [
+      "Shapes",
+      "Baking",
+      "Metal",
+      "Dough",
+      "Holiday"
+    ]
+  },
+  {
+    "main_word": "Gift Tag",
+    "taboo_words": [
+      "Label",
+      "Present",
+      "To/From",
+      "String",
+      "Wrap"
+    ]
+  },
+  {
+    "main_word": "Ribbon Curl",
+    "taboo_words": [
+      "Scissors",
+      "Decoration",
+      "Wrap",
+      "Present",
+      "Bow"
+    ]
+  },
+  {
+    "main_word": "Tree Lights",
+    "taboo_words": [
+      "Blink",
+      "Bright",
+      "Strands",
+      "Bulbs",
+      "Decoration"
+    ]
+  },
+  {
+    "main_word": "Eggnog Latte",
+    "taboo_words": [
+      "Coffee",
+      "Creamy",
+      "Drink",
+      "Warm",
+      "Holiday"
+    ]
+  },
+  {
+    "main_word": "Warm Fireplace",
+    "taboo_words": [
+      "Heat",
+      "Crackle",
+      "Wood",
+      "Cozy",
+      "Mantel"
+    ]
+  },
+  {
+    "main_word": "Winter Mitts",
+    "taboo_words": [
+      "Hands",
+      "Warm",
+      "Soft",
+      "Snow",
+      "Wool"
+    ]
+  },
+  {
+    "main_word": "Snow Cabin",
+    "taboo_words": [
+      "Lodge",
+      "Woods",
+      "Winter",
+      "Fire",
+      "Cozy"
+    ]
+  },
+  {
+    "main_word": "Winter Breeze",
+    "taboo_words": [
+      "Cold",
+      "Air",
+      "Chill",
+      "Outdoors",
+      "Wind"
+    ]
+  },
+  {
+    "main_word": "Santa’s List",
+    "taboo_words": [
+      "Naughty",
+      "Nice",
+      "Names",
+      "Check",
+      "Paper"
+    ]
+  },
+  {
+    "main_word": "Christmas Carol",
+    "taboo_words": [
+      "Song",
+      "Sing",
+      "Music",
+      "Holiday",
+      "Choir"
+    ]
+  },
+  {
+    "main_word": "Tinsel Garland",
+    "taboo_words": [
+      "Shiny",
+      "Decoration",
+      "Tree",
+      "Strands",
+      "Sparkle"
+    ]
+  },
+  {
+    "main_word": "Peppermint Bark",
+    "taboo_words": [
+      "Candy",
+      "Chocolate",
+      "Crunch",
+      "Holiday",
+      "Sweet"
+    ]
+  },
+  {
+    "main_word": "Fruitcake",
+    "taboo_words": [
+      "Dense",
+      "Nuts",
+      "Holiday",
+      "Loaf",
+      "Sweet"
+    ]
+  },
+  {
+    "main_word": "Holiday Ham",
+    "taboo_words": [
+      "Dinner",
+      "Meat",
+      "Feast",
+      "Glaze",
+      "Table"
+    ]
+  },
+  {
+    "main_word": "Sugar Cookies",
+    "taboo_words": [
+      "Sweet",
+      "Bake",
+      "Frosting",
+      "Shapes",
+      "Holiday"
+    ]
+  },
+  {
+    "main_word": "Winter Festival",
+    "taboo_words": [
+      "Ice",
+      "Lights",
+      "Celebration",
+      "Outdoors",
+      "Holiday"
+    ]
+  },
+  {
+    "main_word": "Toy Shop",
+    "taboo_words": [
+      "Gifts",
+      "Santa",
+      "Elves",
+      "Store",
+      "Children"
+    ]
+  },
+  {
+    "main_word": "Nutmeg",
+    "taboo_words": [
+      "Spice",
+      "Eggnog",
+      "Warm",
+      "Sprinkle",
+      "Flavor"
+    ]
+  },
+  {
+    "main_word": "Holiday Break",
+    "taboo_words": [
+      "School",
+      "Vacation",
+      "Family",
+      "Time Off",
+      "Winter"
+    ]
+  },
+  {
+    "main_word": "Ski Patrol",
+    "taboo_words": [
+      "Mountain",
+      "Rescue",
+      "Winter",
+      "Safety",
+      "Slope"
+    ]
+  },
+  {
+    "main_word": "Warm Muffins",
+    "taboo_words": [
+      "Bake",
+      "Sweet",
+      "Breakfast",
+      "Soft",
+      "Tray"
+    ]
+  },
+  {
+    "main_word": "Snow Sprinkle",
+    "taboo_words": [
+      "Flurries",
+      "Light",
+      "Dance",
+      "Air",
+      "Cold"
+    ]
+  },
+  {
+    "main_word": "Tree Stand",
+    "taboo_words": [
+      "Base",
+      "Support",
+      "Green",
+      "Water",
+      "Hold"
+    ]
+  },
+  {
+    "main_word": "Holiday Sweater",
+    "taboo_words": [
+      "Knit",
+      "Pattern",
+      "Cozy",
+      "Festive",
+      "Wear"
+    ]
+  },
+  {
+    "main_word": "Winter Hat",
+    "taboo_words": [
+      "Beanie",
+      "Warm",
+      "Knit",
+      "Head",
+      "Cold"
+    ]
+  },
+  {
+    "main_word": "Firewood",
+    "taboo_words": [
+      "Logs",
+      "Burn",
+      "Fireplace",
+      "Stack",
+      "Heat"
+    ]
+  },
+  {
+    "main_word": "Candy Tin",
+    "taboo_words": [
+      "Metal",
+      "Holiday",
+      "Gift",
+      "Sweet",
+      "Cookies"
+    ]
+  },
+  {
+    "main_word": "Ginger Spice",
+    "taboo_words": [
+      "Scent",
+      "Baking",
+      "Warm",
+      "Holiday",
+      "Flavor"
+    ]
+  },
+  {
+    "main_word": "Snowy Trail",
+    "taboo_words": [
+      "Path",
+      "Winter",
+      "Walk",
+      "Trees",
+      "Quiet"
+    ]
+  },
+  {
+    "main_word": "Christmas Feast",
+    "taboo_words": [
+      "Meal",
+      "Family",
+      "Dinner",
+      "Holiday",
+      "Table"
+    ]
+  },
+  {
+    "main_word": "Tree Cutting",
+    "taboo_words": [
+      "Saw",
+      "Farm",
+      "Timber",
+      "Pine",
+      "Holiday"
+    ]
+  },
+  {
+    "main_word": "Holiday Lantern",
+    "taboo_words": [
+      "Light",
+      "Candle",
+      "Glow",
+      "Decoration",
+      "Winter"
+    ]
+  },
+  {
+    "main_word": "Stocking Stuffers",
+    "taboo_words": [
+      "Small",
+      "Gifts",
+      "Fill",
+      "Surprises",
+      "Christmas"
+    ]
+  },
+  {
+    "main_word": "Warm Cocoa",
+    "taboo_words": [
+      "Chocolate",
+      "Mug",
+      "Marshmallows",
+      "Drink",
+      "Sweet"
+    ]
+  },
+  {
+    "main_word": "Evergreen Forest",
+    "taboo_words": [
+      "Trees",
+      "Pine",
+      "Winter",
+      "Woods",
+      "Scent"
+    ]
+  },
+  {
+    "main_word": "Gift Tower",
+    "taboo_words": [
+      "Stack",
+      "Boxes",
+      "Ribbon",
+      "Presents",
+      "Wrap"
+    ]
+  },
+  {
+    "main_word": "Sled Dog",
+    "taboo_words": [
+      "Husky",
+      "Pull",
+      "Snow",
+      "Winter",
+      "Team"
+    ]
+  },
+  {
+    "main_word": "Snow Fort",
+    "taboo_words": [
+      "Build",
+      "Wall",
+      "Fight",
+      "Kids",
+      "Winter"
+    ]
+  },
+  {
+    "main_word": "Warm Pie",
+    "taboo_words": [
+      "Bake",
+      "Dessert",
+      "Crust",
+      "Slice",
+      "Holiday"
+    ]
+  },
+  {
+    "main_word": "Caroling Group",
+    "taboo_words": [
+      "Sing",
+      "Night",
+      "Songs",
+      "Door",
+      "Choir"
+    ]
+  },
+  {
+    "main_word": "Silver Bells",
+    "taboo_words": [
+      "Song",
+      "Ring",
+      "Music",
+      "Holiday",
+      "Shine"
+    ]
+  },
+  {
+    "main_word": "Winter Quilt",
+    "taboo_words": [
+      "Blanket",
+      "Warm",
+      "Stitch",
+      "Cozy",
+      "Bed"
+    ]
+  },
+  {
+    "main_word": "Sleigh Harness",
+    "taboo_words": [
+      "Reindeer",
+      "Leather",
+      "Bells",
+      "Santa",
+      "Pull"
+    ]
+  },
+  {
+    "main_word": "Frozen Lake",
+    "taboo_words": [
+      "Ice",
+      "Skating",
+      "Winter",
+      "Cold",
+      "Solid"
+    ]
+  },
+  {
+    "main_word": "Holiday Recipe",
+    "taboo_words": [
+      "Baking",
+      "Instructions",
+      "Cookies",
+      "Family",
+      "Tradition"
+    ]
+  },
+  {
+    "main_word": "Warm Fireplace",
+    "taboo_words": [
+      "Crackle",
+      "Heat",
+      "Mantel",
+      "Wood",
+      "Cozy"
+    ]
+  },
+  {
+    "main_word": "Reindeer Trail",
+    "taboo_words": [
+      "Tracks",
+      "Snow",
+      "Hoofprints",
+      "Forest",
+      "Santa"
+    ]
+  },
+  {
+    "main_word": "Snowy Hills",
+    "taboo_words": [
+      "White",
+      "Sledding",
+      "Winter",
+      "Slopes",
+      "Cold"
+    ]
+  },
+  {
+    "main_word": "Holiday Roast",
+    "taboo_words": [
+      "Oven",
+      "Dinner",
+      "Feast",
+      "Table",
+      "Meat"
+    ]
+  },
+  {
+    "main_word": "Festive Ribbon",
+    "taboo_words": [
+      "Bow",
+      "Wrap",
+      "Decoration",
+      "Red",
+      "Satin"
+    ]
+  },
+  {
+    "main_word": "Winter Wonderland",
+    "taboo_words": [
+      "Magic",
+      "Snow",
+      "Trees",
+      "Cold",
+      "Scenic"
+    ]
+  },
+  {
+    "main_word": "Santa’s Boots",
+    "taboo_words": [
+      "Black",
+      "Fur",
+      "Costume",
+      "Footwear",
+      "North Pole"
+    ]
+  },
+  {
+    "main_word": "Gift Surprise",
+    "taboo_words": [
+      "Unknown",
+      "Present",
+      "Unwrap",
+      "Excitement",
+      "Box"
+    ]
+  },
+  {
+    "main_word": "Merry Wishes",
+    "taboo_words": [
+      "Holiday",
+      "Greeting",
+      "Cheer",
+      "Joy",
+      "Message"
+    ]
+  },
+  {
+    "main_word": "Tree Delivery",
+    "taboo_words": [
+      "Truck",
+      "Farm",
+      "Pine",
+      "Fresh",
+      "Transport"
+    ]
+  },
+  {
+    "main_word": "Snowfall",
+    "taboo_words": [
+      "Flakes",
+      "Winter",
+      "Cold",
+      "White",
+      "Drop"
+    ]
+  },
+  {
+    "main_word": "Candy Dish",
+    "taboo_words": [
+      "Bowl",
+      "Sweets",
+      "Holiday",
+      "Guests",
+      "Treats"
+    ]
+  },
+  {
+    "main_word": "Holiday Brunch",
+    "taboo_words": [
+      "Morning",
+      "Meal",
+      "Family",
+      "Food",
+      "Celebrate"
+    ]
+  },
+  {
+    "main_word": "Snow Boots",
+    "taboo_words": [
+      "Warm",
+      "Tread",
+      "Waterproof",
+      "Winter",
+      "Feet"
+    ]
+  },
+  {
+    "main_word": "Evergreen Wreath",
+    "taboo_words": [
+      "Door",
+      "Circle",
+      "Decoration",
+      "Pine",
+      "Green"
+    ]
+  },
+  {
+    "main_word": "Santa’s Bag",
+    "taboo_words": [
+      "Gifts",
+      "Sack",
+      "Red",
+      "Full",
+      "Toys"
+    ]
+  },
+  {
+    "main_word": "Winter Cheer",
+    "taboo_words": [
+      "Joy",
+      "Holiday",
+      "Feelings",
+      "Festive",
+      "Mood"
+    ]
+  },
+  {
+    "main_word": "Hot Soup",
+    "taboo_words": [
+      "Warm",
+      "Bowl",
+      "Winter",
+      "Meal",
+      "Comfort"
+    ]
+  },
+  {
+    "main_word": "Sleigh Path",
+    "taboo_words": [
+      "Snow",
+      "Route",
+      "Reindeer",
+      "Travel",
+      "Winter"
+    ]
+  },
+  {
+    "main_word": "Stocking Hooks",
+    "taboo_words": [
+      "Mantel",
+      "Hold",
+      "Metal",
+      "Hanging",
+      "Decor"
+    ]
+  },
+  {
+    "main_word": "Snow Lantern",
+    "taboo_words": [
+      "Candle",
+      "Winter",
+      "Glow",
+      "Ice",
+      "Light"
+    ]
+  },
+  {
+    "main_word": "Ginger Cookie",
+    "taboo_words": [
+      "Spice",
+      "Bake",
+      "Brown",
+      "Sweet",
+      "Soft"
+    ]
+  },
+  {
+    "main_word": "Holiday Fudge",
+    "taboo_words": [
+      "Chocolate",
+      "Sweet",
+      "Squares",
+      "Treat",
+      "Gift"
+    ]
+  },
+  {
+    "main_word": "Ice Sculpture",
+    "taboo_words": [
+      "Carve",
+      "Frozen",
+      "Display",
+      "Art",
+      "Showcase"
+    ]
+  },
+  {
+    "main_word": "Tree Garland",
+    "taboo_words": [
+      "Decoration",
+      "Strands",
+      "Pine",
+      "Drape",
+      "Festive"
+    ]
+  }
+]
+        `;
+        // =======================================================
+        // END JSON DATA BLOCK
+        // =======================================================
+
+
+        // --- Card HTML Template Function ---
+        // This function generates the HTML string for a single card based on data.
+        function generateCardHtml(card) {
+            // Build the list of taboo words
+            const tabooListItems = card.taboo_words.map(word => {
+                // Using a list item with a decorative, simple star/snowflake bullet
+                return `
+                    <li class="font-medium text-lg">
+                        ${word}
+                    </li>`;
+            }).join('');
+
+            // Return the full card HTML structure
+            return `
+                <div class="card bg-white h-full shadow-lg border-2 flex flex-col transition transform hover:shadow-xl">
+                    <!-- Main Word Title -->
+                    <h2 class="main-word text-center text-xl font-black uppercase tracking-wider mb-4 border-b-2 pb-4">
+                        ${card.main_word}
+                    </h2>
+                    <!--
+			<img src="https://t4.ftcdn.net/jpg/15/35/70/09/240_F_1535700956_wt4uW4Zr1qzAQmctk66jwmeuqhoKgqwm.jpg">
+ Taboo Words List -->
+                    <ul class="taboo-words space-y-1 list-none p-0 mt-2 text-center">
+                        ${tabooListItems}
+                    </ul>
+                </div>
+            `;
+        }
+
+        // --- Initialization Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('cards-container');
+            let cardsHtml = '';
+            
+            try {
+                // Parse the JSON data
+                const cardData = JSON.parse(cardJsonString);
+                
+                if (cardData.length === 0) {
+                    container.innerHTML = '<p class="text-center col-span-4">No card data found.</p>';
+                    return;
+                }
+
+                // Generate HTML for all cards using the template function
+                cardData.forEach(card => {
+                    cardsHtml += generateCardHtml(card);
+                });
+
+                // Insert all generated HTML into the container in one go
+                container.innerHTML = cardsHtml;
+
+            } catch (error) {
+                container.innerHTML = `<p class="text-center text-xl col-span-4">Error processing card data: ${error.message}</p>`;
+                console.error("Failed to process JSON data:", error);
+            }
+        });
+    </script>
+</body>
+</html>
