@@ -869,7 +869,7 @@
       "Fire",
       "Snack",
       "Warm",
-      "Holiday"
+      "Brown"
     ]
   },
   {
@@ -1741,11 +1741,18 @@
                     </li>`;
             }).join('');
 
+
+	    let cardMargin = "mb-4";
+
+	    if(card.main_word.length > 16){
+		cardMargin = "mb-2";
+	    }
+
             // Return the full card HTML structure
             return `
                 <div class="card bg-white h-full shadow-lg border-2 flex flex-col transition transform hover:shadow-xl">
                     <!-- Main Word Title -->
-                    <h2 class="main-word text-center text-xl font-black uppercase tracking-wider mb-4 border-b-2 pb-4">
+                    <h2 class="main-word text-center text-xl font-black uppercase tracking-wider ${cardMargin} border-b-2 pb-4">
                         ${card.main_word}
                     </h2>
                     <!--
