@@ -89,16 +89,13 @@
     </script>
 </head>
 <body>
-
-    <!-- This div will contain all the generated cards -->
     <div id="cards-container">
         <!-- Cards will be inserted here by JavaScript -->
     </div>
 
     <script>
         // =======================================================
-        // JSON DATA BLOCK (EASY TO CHANGE)
-        // This simulates reading the content of "words.json"
+        // JSON DATA BLOCK
         // =======================================================
         const cardJsonString = `
 [
@@ -143,12 +140,12 @@
     ]
   },
   {
-    "main_word": "Stocking",
+    "main_word": "Stockings",
     "taboo_words": [
       "Fireplace",
       "Stuffers",
       "Hanging",
-      "Gifts",
+      "Sock",
       "Mantel"
     ]
   },
@@ -156,16 +153,16 @@
     "main_word": "Elf",
     "taboo_words": [
       "Santa",
-      "Workshop",
       "Toys",
-      "Small",
-      "Pointy Ears"
+      "Movie",
+      "Pointy",
+      "Ears"
     ]
   },
   {
-    "main_word": "Gingerbread",
+    "main_word": "Gingerbread Cookies",
     "taboo_words": [
-      "Cookies",
+      "Brown",
       "House",
       "Icing",
       "Spice",
@@ -205,10 +202,10 @@
   {
     "main_word": "Snowflake",
     "taboo_words": [
-      "Winter",
+      "Tiny",
       "Ice",
       "Cold",
-      "Unique",
+      "Crystal",
       "White"
     ]
   },
@@ -229,7 +226,7 @@
       "Jesus",
       "Mary",
       "Joseph",
-      "Birth"
+      "Scene"
     ]
   },
   {
@@ -249,7 +246,7 @@
       "Flower",
       "Leaves",
       "Plant",
-      "Holiday"
+      "Star"
     ]
   },
   {
@@ -315,10 +312,10 @@
   {
     "main_word": "Holly",
     "taboo_words": [
-      "Red Berries",
-      "Green",
+      "Red",
+      "Berries",
       "Leaves",
-      "Decoration",
+      "Draw",
       "Sharp"
     ]
   },
@@ -326,7 +323,7 @@
     "main_word": "Snowball",
     "taboo_words": [
       "Throw",
-      "Winter",
+      "White",
       "Cold",
       "Fight",
       "Round"
@@ -338,12 +335,12 @@
       "Candy",
       "Red",
       "White",
-      "Mint",
-      "Sweet"
+      "Stripes",
+      "Flavor"
     ]
   },
   {
-    "main_word": "Lights",
+    "main_word": "Christmas Lights",
     "taboo_words": [
       "String",
       "Bright",
@@ -377,7 +374,7 @@
     "taboo_words": [
       "Snow",
       "Slopes",
-      "Winter",
+      "Sport",
       "Poles",
       "Mountains"
     ]
@@ -436,9 +433,9 @@
     "main_word": "Krampus",
     "taboo_words": [
       "Folklore",
-      "Scary",
+      "Bad",
       "Creature",
-      "Christmas",
+      "Horns",
       "Punish"
     ]
   },
@@ -469,7 +466,7 @@
       "Before",
       "Santa",
       "Waiting",
-      "Tradition"
+      "Day"
     ]
   },
   {
@@ -599,7 +596,7 @@
       "Brown",
       "Seeds",
       "Winter",
-      "Nature"
+      "Drop"
     ]
   },
   {
@@ -639,7 +636,7 @@
       "Toy",
       "Soldier",
       "Crack",
-      "Christmas"
+      "Wooden"
     ]
   },
   {
@@ -649,7 +646,7 @@
       "Snow",
       "Wind",
       "Whiteout",
-      "Winter"
+      "Company"
     ]
   },
   {
@@ -756,10 +753,10 @@
     "main_word": "Snowshoes",
     "taboo_words": [
       "Walking",
-      "Winter",
+      "Hiking",
       "Float",
-      "Deep Snow",
-      "Outdoor"
+      "Deep",
+      "Feet"
     ]
   },
   {
@@ -778,7 +775,7 @@
       "Cocoa",
       "Soft",
       "White",
-      "Sweet",
+      "S'mores",
       "Fluffy"
     ]
   },
@@ -799,7 +796,7 @@
       "Mountain",
       "Fire",
       "Resort",
-      "Winter"
+      "Cozy"
     ]
   },
   {
@@ -858,7 +855,7 @@
       "Ground",
       "Flap",
       "Wings",
-      "Winter",
+      "Halo",
       "Kids"
     ]
   },
@@ -883,13 +880,13 @@
     ]
   },
   {
-    "main_word": "Santa’s Hat",
+    "main_word": "Santa Hat",
     "taboo_words": [
       "Red",
       "White",
       "Fuzzy",
       "Costume",
-      "Christmas"
+      "Wear"
     ]
   },
   {
@@ -938,7 +935,7 @@
       "Ribbon",
       "Present",
       "Top",
-      "Curl",
+      "Stick",
       "Decoration"
     ]
   },
@@ -946,7 +943,7 @@
     "main_word": "Jolly",
     "taboo_words": [
       "Merry",
-      "Cheerful",
+      "Holly",
       "Santa",
       "Laugh",
       "Happy"
@@ -956,8 +953,8 @@
     "main_word": "Toy Train",
     "taboo_words": [
       "Tracks",
-      "Present",
-      "Under Tree",
+      "Conductor",
+      "Tree",
       "Miniature",
       "Play"
     ]
@@ -968,12 +965,12 @@
       "Shake",
       "Scene",
       "Glass",
-      "Winter",
+      "Glitter",
       "Decoration"
     ]
   },
   {
-    "main_word": "Tree Farm",
+    "main_word": "Christmas Tree Farm",
     "taboo_words": [
       "Pine",
       "Cut",
@@ -1005,11 +1002,11 @@
   {
     "main_word": "Kringle",
     "taboo_words": [
-      "Scandinavian",
+      "Kris",
+      "Danish",
       "Pastry",
-      "Holiday",
-      "Sweet",
-      "Tradition"
+      "Dough",
+      "Santa"
     ]
   },
   {
@@ -1046,10 +1043,10 @@
     "main_word": "Snowstorm",
     "taboo_words": [
       "Wind",
-      "Flakes",
+      "Blizzard",
       "Cold",
       "Weather",
-      "Strong"
+      "White"
     ]
   },
   {
@@ -1078,8 +1075,8 @@
       "Smell",
       "Tree",
       "Fresh",
-      "Holiday",
-      "Forest"
+      "Forest",
+      "Car"
     ]
   },
   {
@@ -1087,9 +1084,9 @@
     "taboo_words": [
       "Gifts",
       "Rolls",
-      "Holiday",
+      "Presents",
       "Tape",
-      "Colorful"
+      "Pattern"
     ]
   },
   {
@@ -1129,7 +1126,7 @@
       "Warm",
       "Whiskey",
       "Honey",
-      "Winter"
+      "Cinnamon"
     ]
   },
   {
@@ -1139,7 +1136,7 @@
       "Road",
       "Winter",
       "Truck",
-      "Snow"
+      "Drive"
     ]
   },
   {
@@ -1203,23 +1200,13 @@
     ]
   },
   {
-    "main_word": "Fireplace",
+    "main_word": "Naughty or Nice",
     "taboo_words": [
-      "Heat",
-      "Crackle",
-      "Wood",
-      "Cozy",
-      "Mantel"
-    ]
-  },
-  {
-    "main_word": "Santa’s List",
-    "taboo_words": [
-      "Naughty",
-      "Nice",
+      "Santa",
+      "List",
       "Names",
-      "Check",
-      "Paper"
+      "Good",
+      "Bad"
     ]
   },
   {
@@ -1228,17 +1215,17 @@
       "Candy",
       "Chocolate",
       "Crunch",
-      "Holiday",
-      "Sweet"
+      "Pieces",
+      "Tree"
     ]
   },
   {
     "main_word": "Fruitcake",
     "taboo_words": [
-      "Dense",
+      "Bread",
       "Nuts",
-      "Holiday",
-      "Loaf",
+      "Gift",
+      "Dessert",
       "Sweet"
     ]
   },
@@ -1297,9 +1284,9 @@
     "taboo_words": [
       "Mountain",
       "Rescue",
-      "Winter",
+      "Snow",
       "Safety",
-      "Slope"
+      "Red"
     ]
   },
   {
@@ -1317,7 +1304,7 @@
     "taboo_words": [
       "Logs",
       "Burn",
-      "Fireplace",
+      "S'mores",
       "Stack",
       "Heat"
     ]
@@ -1325,10 +1312,10 @@
   {
     "main_word": "Ginger Spice",
     "taboo_words": [
-      "Scent",
+      "Girls",
       "Baking",
       "Warm",
-      "Holiday",
+      "Root",
       "Flavor"
     ]
   },
@@ -1345,21 +1332,11 @@
   {
     "main_word": "Stocking Stuffers",
     "taboo_words": [
-      "Small",
+      "Mantel",
       "Gifts",
       "Fill",
-      "Surprises",
-      "Christmas"
-    ]
-  },
-  {
-    "main_word": "Gift Tower",
-    "taboo_words": [
-      "Stack",
-      "Boxes",
-      "Ribbon",
-      "Presents",
-      "Wrap"
+      "Toys",
+      "Sock"
     ]
   },
   {
@@ -1368,7 +1345,7 @@
       "Husky",
       "Pull",
       "Snow",
-      "Winter",
+      "Race",
       "Team"
     ]
   },
@@ -1378,8 +1355,8 @@
       "Song",
       "Ring",
       "Music",
-      "Holiday",
-      "Shine"
+      "Gold",
+      "Jingle"
     ]
   },
   {
@@ -1400,16 +1377,6 @@
       "Trees",
       "Cold",
       "Scenic"
-    ]
-  },
-  {
-    "main_word": "Santa’s Boots",
-    "taboo_words": [
-      "Black",
-      "Fur",
-      "Costume",
-      "Footwear",
-      "North Pole"
     ]
   },
   {
@@ -1473,16 +1440,6 @@
     ]
   },
   {
-    "main_word": "Stocking Hooks",
-    "taboo_words": [
-      "Mantel",
-      "Hold",
-      "Metal",
-      "Hanging",
-      "Decor"
-    ]
-  },
-  {
     "main_word": "Ginger Cookie",
     "taboo_words": [
       "Spice",
@@ -1509,7 +1466,7 @@
       "Frozen",
       "Display",
       "Art",
-      "Showcase"
+      "Statue"
     ]
   },
   {
@@ -1721,6 +1678,66 @@
       "Flannel",
       "Black"
     ]
+  },
+  {
+    "main_word": "Trans-Siberian Orchestra",
+    "taboo_words": [
+      "Rock",
+      "Band",
+      "Music",
+      "Christmas",
+      "Songs"
+    ]
+  },
+  {
+    "main_word": "Carol of the Bells",
+    "taboo_words": [
+      "Ukrainian",
+      "Christmas",
+      "Song",
+      "Orchestra",
+      "Choir"
+    ]
+  },
+  {
+    "main_word": "December",
+    "taboo_words": [
+      "Month",
+      "November",
+      "January",
+      "Calendar",
+      "Twelve"
+    ]
+  },
+  {
+    "main_word": "Sugarplum",
+    "taboo_words": [
+      "Fairy",
+      "Dance",
+      "Nutcracker",
+      "Candy",
+      "Sweet"
+    ]
+  },
+  {
+    "main_word": "Ho Ho Ho",
+    "taboo_words": [
+      "Santa",
+      "Repeat",
+      "Laugh",
+      "Sound",
+      "Phrase"
+    ]
+  },
+  {
+    "main_word": "Cranberry Sauce",
+    "taboo_words": [
+      "Turkey",
+      "Red",
+      "Tart",
+      "Fruit",
+      "Canned"
+    ]
   }
 ]
         `;
@@ -1734,7 +1751,6 @@
         function generateCardHtml(card) {
             // Build the list of taboo words
             const tabooListItems = card.taboo_words.map(word => {
-                // Using a list item with a decorative, simple star/snowflake bullet
                 return `
                     <li class="font-medium text-lg">
                         ${word}
@@ -1755,9 +1771,7 @@
                     <h2 class="main-word text-center text-xl font-black uppercase tracking-wider ${cardMargin} border-b-2 pb-4">
                         ${card.main_word}
                     </h2>
-                    <!--
-			<img src="https://t4.ftcdn.net/jpg/15/35/70/09/240_F_1535700956_wt4uW4Zr1qzAQmctk66jwmeuqhoKgqwm.jpg">
- Taboo Words List -->
+                    
                     <ul class="taboo-words space-y-1 list-none p-0 mt-2 text-center">
                         ${tabooListItems}
                     </ul>
