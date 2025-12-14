@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taboo Card Grid (Print Ready)</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Apply the Inter font globally */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+            /* Remove default margin/padding for a cleaner look */
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Container for cards - using CSS Grid for 4-column layout */
+        #cards-container {
+            /* Responsive: 1 column mobile, 2 columns medium, 4 columns large */
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 0rem; /* 6 (Tailwind spacing) */
+            width: 100%;
+        }
+	.card {
+            padding: 3rem 1rem 4rem 1rem;
+	    height: 408px !important;
+	}
+	li {
+	    margin-top: 1rem !important;
+	}
+
+        /* Responsive Breakpoints */
+        @media (min-width: 640px) {
+            #cards-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            #cards-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Custom print-friendly styling */
+        @media print {
+            body {
+                background: white;
+                margin: 0;
+            }
+            /* Force 4 columns on print */
+            #cards-container {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 0 /* Reduced gap for print */
+                padding: 0;
+                max-width: 100%;
+                width: 100%;
+            }
+            .card {
+                height: 100%;
+                border: 1px solid #333 !important; /* Ensure border is visible */
+                box-shadow: none !important;
+                border-radius: 0 !important;
+		page-break-inside: avoid; /* For wider browser support */
+		break-inside: avoid;
+            }
+            /* Adjust font size slightly for printing */
+            .main-word {
+                font-size: 1.25rem !important; /* Smaller text for compact cards */
+                line-height: 1.5rem !important;
+            }
+            .taboo-words {
+                font-size: 0.75rem !important;
+            }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="cards-container">
+        <!-- Cards will be inserted here by JavaScript -->
+    </div>
+
+    <script>
+        // =======================================================
+        // JSON DATA BLOCK
+        // =======================================================
+        const cardJsonString = `
+[
+  {
+    "main_word": "Kim (Ha) Thoun",
+    "taboo_words": [
+      "Aaron",
+      "Luka",
+      "Math",
+      "Short",
+      "Cook",
+      "Bake"
+    ]
+  },
+  {
+    "main_word": "Aaron Thoun",
+    "taboo_words": [
+      "Kim",
+      "Luka",
+      "Lawn",
+      "Glasses",
+      "Hermit",
+      "Homebody"
+    ]
+  },
+  {
+    "main_word": "Tiffany Cheng (Phan)",
+    "taboo_words": [
+      "Paul",
+      "Dogs (Sally, Ellie, Yuki)",
+      "Cookies",
+      "Tesla",
+      "Taiwan",
+      "Sleep"
+    ]
+  },
+  {
+    "main_word": "Paul Phan",
+    "taboo_words": [
+      "Tiffany",
+      "Dogs (Sally, Ellie, Yuki)",
+      "Subaru",
+      "Golf",
+      "Only-child",
+      "Friendly"
+    ]
+  },
+  {
+    "main_word": "Mary (Vuong) Hong",
+    "taboo_words": [
+      "Phil",
+      "Cameron",
+      "PA",
+      "Short",
+      "Bridge City",
+      "Dogs (Dubu, Gamja)"
+    ]
+  },
+  {
+    "main_word": "Phil Hong",
+    "taboo_words": [
+      "Mary",
+      "Cameron",
+      "Korean",
+      "Golf",
+      "Pokemon",
+      "Dogs (Dubu, Gamja)"
+    ]
+  },
+  {
+    "main_word": "Angie Arrambide",
+    "taboo_words": [
+      "David",
+      "Dogs (Zeus, Rosie)",
+      "Guns",
+      "Jiu Jitsu",
+      "Mexican",
+      "Strong"
+    ]
+  },
+  {
+    "main_word": "David Remanjon",
+    "taboo_words": [
+      "Angie",
+      "Subaru",
+      "Truck",
+      "Weird",
+      "Mac & Cheese",
+      "Engineer"
+    ]
+  },
+  {
+    "main_word": "Lisa (Vo) Orvis",
+    "taboo_words": [
+      "Logan",
+      "Lana",
+      "Kirby",
+      "Gun",
+      "Lashes",
+      "Germaphobe"
+    ]
+  },
+  {
+    "main_word": "Logan Orvis",
+    "taboo_words": [
+      "Lisa",
+      "Lana",
+      "Kirby",
+      "Gym",
+      "White",
+      "Marathon"
+    ]
+  },
+  {
+    "main_word": "Grace Tran (Nguyen)",
+    "taboo_words": [
+      "Huy",
+      "Callum",
+      "Lashes",
+      "Cats",
+      "Canada",
+      "PHD"
+    ]
+  },
+  {
+    "main_word": "Huy Nguyen",
+    "taboo_words": [
+      "Grace",
+      "Callum",
+      "Tall",
+      "Tuberculosis",
+      "Golf",
+      "Cats"
+    ]
+  }
+]
+        `;
+        // =======================================================
+        // END JSON DATA BLOCK
+        // =======================================================
+
+
+        // --- Card HTML Template Function ---
+        // This function generates the HTML string for a single card based on data.
+        function generateCardHtml(card) {
+            // Build the list of taboo words
+            const tabooListItems = card.taboo_words.map(word => {
+                return `
+                    <li class="font-medium text-lg">
+                        ${word}
+                    </li>`;
+            }).join('');
+
+            // Return the full card HTML structure
+            return `
+                <div class="card bg-white h-full shadow-lg border-2 flex flex-col transition transform hover:shadow-xl">
+                    <!-- Main Word Title -->
+                    <h2 class="main-word text-center text-xl font-black uppercase tracking-wider  border-b-2 pb-4">
+                        ${card.main_word}
+                    </h2>
+                    
+                    <ul class="taboo-words space-y-1 list-none p-0 text-center">
+                        ${tabooListItems}
+                    </ul>
+                </div>
+            `;
+        }
+
+        // --- Initialization Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('cards-container');
+            let cardsHtml = '';
+            
+            try {
+                // Parse the JSON data
+                const cardData = JSON.parse(cardJsonString);
+                
+                if (cardData.length === 0) {
+                    container.innerHTML = '<p class="text-center col-span-4">No card data found.</p>';
+                    return;
+                }
+
+                // Generate HTML for all cards using the template function
+                cardData.forEach(card => {
+                    cardsHtml += generateCardHtml(card);
+                });
+
+                // Insert all generated HTML into the container in one go
+                container.innerHTML = cardsHtml;
+
+            } catch (error) {
+                container.innerHTML = `<p class="text-center text-xl col-span-4">Error processing card data: ${error.message}</p>`;
+                console.error("Failed to process JSON data:", error);
+            }
+        });
+    </script>
+</body>
+</html>
